@@ -1,0 +1,33 @@
+L1 cache : 64 * 1024 (1024 cache lines stored)
+L2 cache : 64 * 8096 (8096 cache lines stored)
+L3 cache : 64 * 1024 * 1024 (1M cache lines stored) 
+
+Why is that? Step of 16 is 3 times faster with the same amount of cache hits and misses
+
+I1 cache:         65536 B, 64 B, 2-way associative
+D1 cache:         65536 B, 64 B, 2-way associative
+LL cache:         6291456 B, 64 B, 48-way associative
+
+
+Command:          ./a.out 1024 2000000
+7 MB byte chunk read and written 1M times in 42.7253 ms
+--------------------------------------------------------------------------------
+           Ir I1mr ILmr        Dr      D1mr      DLmr          Dw       D1mw       DLmw  file:function
+--------------------------------------------------------------------------------
+1,677,721,760   18   15        31         3         2 419,430,429 26,214,402 26,214,402  ???:main
+   19,000,042    5    5 1,000,013 1,000,004 1,000,004   2,000,009    125,002    125,002  ???:seqAccess(int, int)
+
+
+Command:          ./a.out 16 2000000
+7 MB byte chunk read and written 1M times in 15.5748 ms
+--------------------------------------------------------------------------------
+           Ir I1mr ILmr        Dr      D1mr      DLmr          Dw       D1mw       DLmw  file:function
+--------------------------------------------------------------------------------
+1,677,721,760   18   15        31         3         2 419,430,429 26,214,402 26,214,402  ???:main
+   19,000,042    5    5 1,000,013 1,000,005 1,000,005   2,000,009    125,003    125,003  ???:seqAccess(int, int)
+
+
+Command:          ./a.out 80 8000000
+Ir I1mr ILmr        Dr      D1mr    DLmr          Dw       D1mw       DLmw  file:function
+   67,000,042    5    5 1,000,013 1,000,005 847,941   8,000,009    500,003    500,003  ???:seqAccess(int, int)
+30 MB byte chunk read and written 1M times in 30.5037 ms
